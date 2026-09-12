@@ -21,6 +21,8 @@
 #include "main.h"
 #include "usart.h"
 #include "gpio.h"
+#include "spi.h"
+#include "tim.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
