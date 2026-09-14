@@ -38,7 +38,7 @@
 /* USER CODE BEGIN PD */
 #define NUM_BYTES 3
 #define SPI_TIMEOUT_MS 100
-#define PWM_MIN 1100
+#define PWM_MIN 1200
 #define PWM_RANGE 1000
 /* USER CODE END PD */
 
