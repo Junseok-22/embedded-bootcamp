@@ -36,6 +36,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define NUM_BYTES 3
+#define SPI_TIMEOUT_MS 100
+#define PWM_MIN 1100
+#define PWM_RANGE 1000
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -46,10 +50,12 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t tx_buf [3] = {0x01, 0x80, 0x00};
-uint8_t rx_buf [3] = {};
+uint8_t tx_buf [NUM_BYTES] = {0x01, 0x80, 0x00};
+uint8_t rx_buf [NUM_BYTES] = {};
 uint16_t adc_value = 0;
 uint16_t pwm_value = 0;
+
+
 
 /* USER CODE END PV */
 
@@ -103,11 +109,11 @@ int main(void)
   {
     /* USER CODE END WHILE */
 	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
-	  HAL_SPI_TransmitReceive(&hspi1, tx_buf, rx_buf, 3, 100);
+	  HAL_SPI_TransmitReceive(&hspi1, tx_buf, rx_buf, NUM_BYTES, SPI_TIMEOUT_MS);
 	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);
 
 	  adc_value = ((rx_buf[1] & 0x03) << 8) | rx_buf[2];
-	  pwm_value = 1000 + (adc_value * 1000) / 1023;
+	  pwm_value = PWM_MIN + (adc_value * PWM_RANGE) / 1023;
 
 	  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, pwm_value);
 	  HAL_Delay(10);
