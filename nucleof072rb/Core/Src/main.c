@@ -109,7 +109,13 @@ int main(void)
   {
     /* USER CODE END WHILE */
 	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
-	  HAL_SPI_TransmitReceive(&hspi1, tx_buf, rx_buf, NUM_BYTES, SPI_TIMEOUT_MS);
+	  HAL_StatusTypeDef status = HAL_SPI_TransmitReceive(&hspi1, tx_buf, rx_buf, NUM_BYTES, SPI_TIMEOUT_MS);
+	  if (status != HAL_OK){
+		  char msg[] = "SPI Transmit/Receive failed\r\n";
+		  HAL_UART_Transmit(&huart2, (uint8_t*)msg, sizeof(msg) - 1, 100);
+		  Error_Handler();
+	  }
+
 	  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET);
 
 	  adc_value = ((rx_buf[1] & 0x03) << 8) | rx_buf[2];
